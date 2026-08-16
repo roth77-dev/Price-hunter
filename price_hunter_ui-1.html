@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Price Hunter — MVP</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#687386;--line:#e5e9f0;--red:#e5484d;--green:#1f9d68;--orange:#e58b25;--blue:#315efb}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{background:#111827;color:#fff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:25px;font-weight:800}.logo span{color:#7dd3fc}.status{font-size:13px;color:#cbd5e1}
+main{max-width:1150px;margin:28px auto;padding:0 18px}
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:18px;margin-bottom:20px}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 4px 18px #1720330a}
+.hero .panel{padding:25px}.eyebrow{color:var(--blue);font-weight:700;font-size:13px}.title{font-size:32px;margin:8px 0}.subtitle{color:var(--muted);line-height:1.6}
+.search{display:flex;gap:10px;margin-top:20px}.search input{flex:1;padding:14px;border:1px solid #d7dce5;border-radius:12px;font-size:16px}.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff}.btn.secondary{background:#eef2ff;color:#315efb}
+.stat{padding:20px}.stat b{font-size:31px;display:block;margin:5px 0}.stat small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}.card{padding:19px}.card h3{margin:0 0 8px}.num{font-size:28px;font-weight:800}.muted{color:var(--muted)}
+.alert{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid #ffd1d1;background:#fff7f7}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800}.danger{background:#ffe1e1;color:#b4232a}.ok{background:#dff7eb;color:#13764e}.warn{background:#fff0d8;color:#9a5b00}
+.product{display:flex;justify-content:space-between;gap:20px;align-items:center}.product h2{margin:7px 0}.price{font-size:30px;font-weight:900;color:var(--red)}.old{color:var(--muted);text-decoration:line-through}.score{font-size:24px;font-weight:900}.scorebox{min-width:150px;text-align:center}
+table{width:100%;border-collapse:collapse}th,td{text-align:right;padding:13px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:13px}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:800px){.hero,.grid{grid-template-columns:1fr}.product{flex-direction:column;align-items:flex-start}.scorebox{width:100%;text-align:right}.search{flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">PRICE <span>HUNTER</span> 🎯</div>
+  <div class="status">● מערכת הדגמה · ניטור פעיל</div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="panel">
+      <div class="eyebrow">PRICING ERROR DETECTOR</div>
+      <div class="title">תפוס טעויות מחיר לפני שהן נעלמות</div>
+      <div class="subtitle">מנוע שמזהה מחירים חריגים ביחס למחיר השוק ומציג לך את העסקאות החשודות ביותר.</div>
+      <div class="search">
+        <input id="search" placeholder="חפש מוצר, דגם או SKU..." oninput="filterAlerts()">
+        <button class="btn" onclick="filterAlerts()">חפש</button>
+      </div>
+    </div>
+    <div class="panel stat">
+      <small>התראה החמה ביותר</small>
+      <b id="hotScore">99/100</b>
+      <span class="badge danger">חשד גבוה מאוד</span>
+      <p class="muted">זוהה לפני 12 שניות</p>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><span class="muted">מוצרים במעקב</span><div class="num">12,842</div></div>
+    <div class="card"><span class="muted">חנויות מנוטרות</span><div class="num">24</div></div>
+    <div class="card"><span class="muted">חריגות היום</span><div class="num" id="alertCount">37</div></div>
+  </section>
+
+  <section class="card alert" style="padding:20px;margin-bottom:16px">
+    <div>
+      <span class="badge danger">🚨 PRICE ERROR</span>
+      <h2 style="margin:9px 0 5px">Lenovo Legion 5</h2>
+      <div class="muted">דגם 82Y9000ABC · Store D</div>
+    </div>
+    <div>
+      <div class="old">מחיר שוק: ₪4,820</div>
+      <div class="price">₪485</div>
+    </div>
+    <div class="scorebox">
+      <div class="muted">Pricing Error Score</div>
+      <div class="score">99/100</div>
+      <button class="btn" onclick="openDeal()">בדוק עסקה</button>
+    </div>
+  </section>
+
+  <section class="card" style="padding:20px;margin-bottom:20px">
+    <h3>מחירי המוצר שנמצאו</h3>
+    <table id="offers">
+      <thead><tr><th>חנות</th><th>מחיר</th><th>סטייה מהשוק</th><th>סטטוס</th></tr></thead>
+      <tbody>
+        <tr><td>Store D</td><td><b>₪485</b></td><td>89.9%-</td><td><span class="badge danger">חשוד מאוד</span></td></tr>
+        <tr><td>Store C</td><td>₪4,790</td><td>0.6%+</td><td><span class="badge ok">תקין</span></td></tr>
+        <tr><td>Store A</td><td>₪4,850</td><td>0.6%-</td><td><span class="badge ok">תקין</span></td></tr>
+        <tr><td>Store B</td><td>₪4,990</td><td>3.5%+</td><td><span class="badge ok">תקין</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🚨 התראות אחרונות</h2>
+    <div id="alerts" class="grid">
+      <div class="card alertItem"><span class="badge danger">96/100</span><h3>Samsung 65" QLED</h3><div class="price">₪799</div><div class="muted">מחיר שוק ₪3,990 · לפני 2 דק׳</div></div>
+      <div class="card alertItem"><span class="badge warn">82/100</span><h3>Apple AirPods Pro</h3><div class="price">₪249</div><div class="muted">מחיר שוק ₪899 · לפני 6 דק׳</div></div>
+      <div class="card alertItem"><span class="badge danger">99/100</span><h3>Lenovo Legion 5</h3><div class="price">₪485</div><div class="muted">מחיר שוק ₪4,820 · לפני 12 שנ׳</div></div>
+    </div>
+  </section>
+</main>
+
+<footer>Price Hunter MVP · גרסת ממשק ראשונה</footer>
+
+<script>
+function openDeal(){
+  alert("בגרסה הבאה הכפתור יוביל לדף המוצר האמיתי ויציג גם היסטוריית מחירים.");
+}
+function filterAlerts(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  document.querySelectorAll(".alertItem").forEach(el=>{
+    el.style.display=(!q || el.innerText.toLowerCase().includes(q)) ? "" : "none";
+  });
+}
+</script>
+</body>
+</html>
