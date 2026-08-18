@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Price Hunter — Amazon • AliExpress • Temu</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#687386;--line:#e5e9f0;--red:#e5484d;--green:#1f9d68;--blue:#315efb}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{background:#111827;color:#fff;padding:20px 5%;display:flex;justify-content:space-between;align-items:center}.logo{font-size:25px;font-weight:800}.logo span{color:#7dd3fc}.status{font-size:13px;color:#cbd5e1}
+main{max-width:1150px;margin:28px auto;padding:0 18px}.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;margin-bottom:20px}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 4px 18px #1720330a}.hero .panel{padding:25px}
+.eyebrow{color:var(--blue);font-weight:700;font-size:13px}.title{font-size:31px;margin:8px 0}.subtitle,.muted{color:var(--muted);line-height:1.6}
+.search{display:flex;gap:10px;margin-top:20px}.search input{flex:1;padding:14px;border:1px solid #d7dce5;border-radius:12px;font-size:16px}.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff}
+.stat{padding:20px}.stat b{font-size:31px;display:block;margin:5px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}.card{padding:19px}.num{font-size:28px;font-weight:800}
+.platforms{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.platform{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fafbfe}.platform strong{display:block;font-size:18px;margin-bottom:5px}.platform span{font-size:13px;color:var(--muted)}
+.alert{display:flex;justify-content:space-between;gap:15px;align-items:center;border:1px solid #ffd1d1;background:#fff7f7}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800}.danger{background:#ffe1e1;color:#b4232a}.ok{background:#dff7eb;color:#13764e}
+.price{font-size:30px;font-weight:900;color:var(--red)}.old{color:var(--muted);text-decoration:line-through}.score{font-size:24px;font-weight:900}.scorebox{min-width:150px;text-align:center}
+table{width:100%;border-collapse:collapse}th,td{text-align:right;padding:13px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:13px}.store{font-weight:800}footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:800px){.hero,.grid,.platforms{grid-template-columns:1fr}.alert{flex-direction:column;align-items:flex-start}.scorebox{width:100%;text-align:right}.search{flex-direction:column}}
+</style></head>
+<body>
+<header><div class="logo">PRICE <span>HUNTER</span> 🎯</div><div class="status">● MVP · Amazon · AliExpress · Temu</div></header>
+<main>
+<section class="hero">
+<div class="panel"><div class="eyebrow">CROSS-STORE PRICE ERROR DETECTOR</div>
+<div class="title">השווה את אותו מוצר בין 3 ענקיות מסחר</div>
+<div class="subtitle">חיפוש אחד, השוואה בין Amazon, AliExpress ו-Temu, וזיהוי אוטומטי של מחיר שנראה חריג.</div>
+<div class="search"><input id="search" placeholder="לדוגמה: Lenovo Legion 5 / AirPods Pro / iPhone 16"><button class="btn" onclick="searchProduct()">חפש</button></div>
+<div class="platforms"><div class="platform"><strong>Amazon</strong><span>מחירי מוצר והצעות</span></div><div class="platform"><strong>AliExpress</strong><span>מחירי מוכרים והצעות</span></div><div class="platform"><strong>Temu</strong><span>מחירי מוצרים ומבצעים</span></div></div>
+<div id="msg" class="muted">כרגע מוצגים נתוני הדגמה. בשלב הבא נחבר מקורות נתונים אמיתיים.</div></div>
+<div class="panel stat"><small>ציון החשד הגבוה ביותר</small><b>99/100</b><span class="badge danger">חשד גבוה מאוד</span><p class="muted">מחיר נמוך בכ־90% ממחיר השוק</p></div>
+</section>
+<section class="grid"><div class="card"><span class="muted">מוצרים במעקב</span><div class="num">12,842</div></div><div class="card"><span class="muted">מקורות</span><div class="num">3</div></div><div class="card"><span class="muted">חריגות היום</span><div class="num">37</div></div></section>
+<section class="card alert" style="padding:20px;margin-bottom:16px"><div><span class="badge danger">🚨 PRICE ERROR</span><h2 id="productName" style="margin:9px 0 5px">Lenovo Legion 5</h2><div class="muted">דגם 82Y9000ABC</div></div><div><div class="old">מחיר שוק: ₪4,820</div><div class="price">₪485</div></div><div class="scorebox"><div class="muted">Pricing Error Score</div><div class="score">99/100</div><button class="btn" onclick="openDeal()">בדוק עסקה</button></div></section>
+<section class="card" style="padding:20px;margin-bottom:20px"><h3>השוואת מחירים</h3>
+<table><thead><tr><th>מקור</th><th>מחיר</th><th>סטייה מהשוק</th><th>סטטוס</th></tr></thead><tbody>
+<tr><td class="store">Amazon</td><td>₪4,850</td><td>0.6%-</td><td><span class="badge ok">תקין</span></td></tr>
+<tr><td class="store">AliExpress</td><td>₪4,790</td><td>0.6%+</td><td><span class="badge ok">תקין</span></td></tr>
+<tr><td class="store">Temu</td><td><b>₪485</b></td><td>89.9%-</td><td><span class="badge danger">חשוד מאוד</span></td></tr>
+</tbody></table><p class="muted" style="font-size:12px">המחירים בטבלה הם נתוני הדגמה בלבד עד לחיבור מקורות נתונים אמיתיים.</p></section>
+<section><h2>🚨 התראות אחרונות</h2><div class="grid"><div class="card"><span class="badge danger">96/100</span><h3>Samsung 65" QLED</h3><div class="price">₪799</div><div class="muted">שוק ₪3,990 · Temu</div></div><div class="card"><span class="badge">82/100</span><h3>Apple AirPods Pro</h3><div class="price">₪249</div><div class="muted">שוק ₪899 · AliExpress</div></div><div class="card"><span class="badge danger">99/100</span><h3>Lenovo Legion 5</h3><div class="price">₪485</div><div class="muted">שוק ₪4,820 · Temu</div></div></div></section>
+</main><footer>Price Hunter MVP · Amazon • AliExpress • Temu</footer>
+<script>
+function searchProduct(){const q=document.getElementById('search').value.trim();if(!q){document.getElementById('msg').textContent='הקלד שם מוצר או דגם כדי לבצע חיפוש.';return}document.getElementById('productName').textContent=q;document.getElementById('msg').textContent='חיפוש הדגמה עבור '+q+' — הנתונים עדיין מדומים.'}
+function openDeal(){alert('בגרסה הבאה כאן ייפתח הקישור האמיתי להצעה שנמצאה.')}
+</script></body></html>
