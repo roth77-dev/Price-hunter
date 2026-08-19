@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Price Hunter</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e9f0;--blue:#315efb;--red:#d92d20;--green:#13764e}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:#111827;color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:25px;font-weight:900}.status{font-size:13px;color:#d0d5dd}
+main{max-width:1050px;margin:auto;padding:18px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px}
+.hero{display:grid;grid-template-columns:1fr 250px;gap:16px}.eyebrow{font-size:12px;color:var(--blue);font-weight:800}
+.title{font-size:28px;font-weight:900;margin:8px 0}.muted{color:var(--muted)}
+.search{display:flex;gap:10px;margin:18px 0}input{flex:1;padding:14px;border:1px solid #cfd6e4;border-radius:10px;font-size:16px}
+button{border:0;border-radius:10px;padding:13px 20px;background:var(--blue);color:white;font-weight:800}
+button.secondary{background:#eef2ff;color:#243b8f}.stat{text-align:center;display:flex;flex-direction:column;justify-content:center}
+.stat b{font-size:42px;margin:10px 0}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#344054;font-weight:800;font-size:13px}
+.badge.danger{background:#fee4e2;color:#b42318}.badge.ok{background:#dcfae6;color:#067647}
+.platforms,.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.platform{padding:15px;background:#f8fafc;border:1px solid var(--line);border-radius:12px}
+.platform strong{display:block;font-size:18px;margin-bottom:5px}.alert{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:center}
+.price{font-size:32px;font-weight:900;color:var(--red)}.old{text-decoration:line-through;color:var(--muted)}
+.score{font-size:26px;font-weight:900}table{width:100%;border-collapse:collapse}th,td{text-align:right;padding:13px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-size:13px}.store{font-weight:900}.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:12px;font-size:13px}
+footer{text-align:center;color:var(--muted);padding:20px}
+@media(max-width:800px){.hero,.platforms,.grid{grid-template-columns:1fr}.alert{grid-template-columns:1fr}.search{flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div class="logo">PRICE HUNTER 🎯</div><div class="status">MVP · Amazon · AliExpress · Temu</div></header>
+<main>
+<section class="hero">
+<div class="panel">
+<div class="eyebrow">CROSS-STORE PRICE ERROR DETECTOR</div>
+<div class="title">תפוס טעות מחיר לפני שהיא נעלמת</div>
+<div class="muted">חיפוש אחד בין Amazon, AliExpress ו-Temu וזיהוי מחיר שנראה חריג.</div>
+<div class="search"><input id="search" placeholder="לדוגמה: Lenovo Legion 5 / AirPods Pro / iPhone 16"><button onclick="searchProduct()">חפש</button></div>
+<div class="platforms">
+<div class="platform"><strong>Amazon</strong><span class="muted">מחירי מוצר והצעות</span></div>
+<div class="platform"><strong>AliExpress</strong><span class="muted">מחירי מוכרים והצעות</span></div>
+<div class="platform"><strong>Temu</strong><span class="muted">מחירי מוצרים ומבצעים</span></div>
+</div>
+<p id="msg" class="muted">מצב הדגמה: המחירים המוצגים כרגע הם נתוני דוגמה בלבד.</p>
+</div>
+<div class="panel stat"><small>ציון חשד</small><b id="score">99/100</b><span id="scoreBadge" class="badge danger">חשוד מאוד</span><p id="scoreText" class="muted">מחיר נמוך בכ־90% ממחיר ההשוואה.</p></div>
+</section>
+
+<section class="card alert">
+<div><span class="badge danger">🚨 PRICE ERROR</span><h2 id="productName">Lenovo Legion 5</h2><div class="muted">הדגמה של מנגנון זיהוי חריגה.</div></div>
+<div><div class="old">מחיר השוואה: ₪4,820</div><div id="alertPrice" class="price">₪485</div></div>
+<div style="text-align:center"><div class="muted">Pricing Error Score</div><div id="score2" class="score">99/100</div></div>
+</section>
+
+<section class="card"><h2>השוואת מחירים</h2>
+<table><thead><tr><th>מקור</th><th>מחיר</th><th>סטייה</th><th>סטטוס</th><th></th></tr></thead><tbody id="prices"></tbody></table>
+<p class="muted" style="font-size:12px">⚠️ המחירים הם נתוני הדגמה בלבד. חיבור לנתוני Amazon, AliExpress ו-Temu יתווסף בשלב הבא.</p>
+</section>
+
+<section class="grid">
+<div class="card"><span class="muted">מוצרים במעקב</span><div style="font-size:30px;font-weight:900">12</div></div>
+<div class="card"><span class="muted">מקורות</span><div style="font-size:30px;font-weight:900">3</div></div>
+<div class="card"><span class="muted">חריגות בדמו</span><div style="font-size:30px;font-weight:900">37</div></div>
+</section>
+<div class="notice"><b>השלב הבא:</b> לחבר את Price Hunter למקורות נתונים אמיתיים ולחשב חריגות בצורה אמינה.</div>
+</main>
+<footer>Price Hunter MVP · Amazon • AliExpress • Temu</footer>
+
+<script>
+const demo={
+"Lenovo Legion 5":{market:4820,prices:{Amazon:4850,AliExpress:4790,Temu:485}},
+"AirPods Pro":{market:899,prices:{Amazon:879,AliExpress:860,Temu:249}},
+"iPhone 16":{market:3290,prices:{Amazon:3250,AliExpress:3180,Temu:499}}
+};
+function money(n){return "₪"+Number(n).toLocaleString("he-IL")}
+function render(product){
+ const d=demo[product]||{market:1000,prices:{Amazon:980,AliExpress:1020,Temu:950}};
+ const vals=Object.values(d.prices),min=Math.min(...vals);
+ const score=Math.max(0,Math.min(99,Math.round((1-min/d.market)*110)));
+ document.getElementById("productName").textContent=product;
+ document.getElementById("alertPrice").textContent=money(min);
+ document.getElementById("score").textContent=score+"/100";
+ document.getElementById("score2").textContent=score+"/100";
+ const badge=document.getElementById("scoreBadge");
+ badge.textContent=score>=70?"חשוד מאוד":score>=35?"כדאי לבדוק":"נראה תקין";
+ badge.className="badge "+(score>=70?"danger":score<35?"ok":"");
+ document.getElementById("scoreText").textContent="המחיר הנמוך ביותר נמוך בכ־"+Math.max(0,Math.round((1-min/d.market)*100))+"% ממחיר ההשוואה.";
+ const tbody=document.getElementById("prices");tbody.innerHTML="";
+ for(const [store,price] of Object.entries(d.prices)){
+  const dev=((price-d.market)/d.market)*100,suspicious=price<d.market*0.65;
+  const url=store==="Amazon"?"https://www.amazon.com/s?k="+encodeURIComponent(product):
+    store==="AliExpress"?"https://www.aliexpress.com/w/wholesale-"+encodeURIComponent(product)+".html":
+    "https://www.temu.com/search_result.html?search_key="+encodeURIComponent(product);
+  const tr=document.createElement("tr");
+  tr.innerHTML="<td class='store'>"+store+"</td><td><b>"+money(price)+"</b></td><td>"+(dev>=0?"+":"")+dev.toFixed(1)+"%</td><td><span class='badge "+(suspicious?"danger":"ok")+"'>"+(suspicious?"חשוד מאוד":"תקין")+"</span></td><td><button class='secondary' onclick="window.open('"+url+"','_blank')">בדוק באתר</button></td>";
+  tbody.appendChild(tr);
+ }
+}
+function searchProduct(){
+ const q=document.getElementById("search").value.trim();
+ if(!q){document.getElementById("msg").textContent="הקלד שם מוצר או דגם.";return}
+ document.getElementById("msg").textContent=demo[q]?"נמצאה הדגמת מחיר עבור "+q+".":"אין עדיין נתוני דוגמה עבור "+q+" — מוצגת תצוגת בסיס.";
+ render(q);
+}
+render("Lenovo Legion 5");
+</script>
+</body></html>
